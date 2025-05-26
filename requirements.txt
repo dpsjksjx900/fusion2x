@@ -1,0 +1,5 @@
+ffmpeg-python
+tqdm
+jsonschema
+requests
+PyQt5
