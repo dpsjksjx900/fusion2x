@@ -19,11 +19,7 @@ def find_default_rife_exe():
     Attempts to find the latest rife-ncnn-vulkan.exe in models/interpolation/
     """
     model_base = os.path.abspath(
-        os.path.join(
-        os.path.dirname(__file__),
-        "..", "..",    # ↑ too many “..”
-        "models", "interpolation"
-        )
+        os.path.join(os.path.dirname(__file__), "..", "..", "models", "interpolation")
     )
     # Find the folder starting with 'rife-ncnn-vulkan'
     if not os.path.exists(model_base):
@@ -40,7 +36,7 @@ def run_rife_ncnn_vulkan(frame_dir, params, logger):
     exe_path = params.get("rife_exe_path")
     if not exe_path:
         model_root = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "..", "..", "..", "models", "interpolation")
+            os.path.join(os.path.dirname(__file__), "..", "..", "models", "interpolation")
         )
         exe_path = find_model_executable(model_root, "rife-ncnn-vulkan", logger=logger)
     if not exe_path or not os.path.isfile(exe_path):

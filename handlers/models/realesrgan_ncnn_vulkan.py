@@ -18,11 +18,7 @@ def find_default_realesrgan_exe():
     Find the latest realesrgan-ncnn-vulkan.exe in models/upscaling/
     """
     model_base = os.path.abspath(
-        os.path.join(
-        os.path.dirname(__file__),
-        "..", "..",    # ↑ too many “..”
-        "models", "upscaling"
-        )
+        os.path.join(os.path.dirname(__file__), "..", "..", "models", "upscaling")
     )
     if not os.path.exists(model_base):
         return None
@@ -37,7 +33,7 @@ def run_realesrgan_ncnn_vulkan(frame_dir, params, logger):
     exe_path = params.get("realesrgan_exe_path")
     if not exe_path:
         model_root = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "..", "..", "..", "models", "upscaling")
+            os.path.join(os.path.dirname(__file__), "..", "..", "models", "upscaling")
         )
         exe_path = find_model_executable(model_root, "realesrgan-ncnn-vulkan", logger=logger)
     if not exe_path or not os.path.isfile(exe_path):

@@ -19,11 +19,7 @@ def find_default_waifu2x_exe():
     Attempts to find the latest waifu2x-ncnn-vulkan.exe in models/upscaling/
     """
     model_base = os.path.abspath(
-        os.path.join(
-        os.path.dirname(__file__),
-        "..", "..",    # ↑ too many “..”
-        "models", "upscaling"
-        )
+        os.path.join(os.path.dirname(__file__), "..", "..", "models", "upscaling")
     )
     if not os.path.exists(model_base):
         return None
@@ -38,7 +34,7 @@ def run_waifu2x_ncnn_vulkan(frame_dir, params, logger):
     exe_path = params.get("waifu2x_exe_path")
     if not exe_path:
         model_root = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), "..", "..", "..", "models", "upscaling")
+            os.path.join(os.path.dirname(__file__), "..", "..", "models", "upscaling")
         )
         exe_path = find_model_executable(model_root, "waifu2x-ncnn-vulkan", logger=logger)
     if not exe_path or not os.path.isfile(exe_path):
