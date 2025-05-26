@@ -19,7 +19,11 @@ def find_default_waifu2x_exe():
     Attempts to find the latest waifu2x-ncnn-vulkan.exe in models/upscaling/
     """
     model_base = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "..", "..", "models", "upscaling")
+        os.path.join(
+        os.path.dirname(__file__),
+        "..", "..",    # ↑ too many “..”
+        "models", "upscaling"
+        )
     )
     if not os.path.exists(model_base):
         return None

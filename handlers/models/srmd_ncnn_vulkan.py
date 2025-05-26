@@ -18,7 +18,11 @@ def find_default_srmd_exe():
     Find the latest srmd-ncnn-vulkan.exe in models/upscaling/
     """
     model_base = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "..", "..", "models", "upscaling")
+        os.path.join(
+        os.path.dirname(__file__),
+        "..", "..",     # ↑ too many “..”
+        "models", "upscaling"
+        )
     )
     if not os.path.exists(model_base):
         return None
