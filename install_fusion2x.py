@@ -6,8 +6,6 @@ import platform
 REQUIREMENTS = [
     "tqdm",
     "jsonschema"
-    +PyQt5
-+ffmpeg-python
     # Add more as needed
 ]
 
