@@ -2,9 +2,7 @@ import argparse
 import os
 import sys
 import json
-from core.operator import process_request  # The main pipeline controller
 from utils.logger import get_logger
-from utils.json_utils import validate_json_request, load_json_from_file
 
 """
 Fusion2X Receiver
@@ -24,6 +22,7 @@ Output:
         - Log file path
         - Error code/message (if failed)
 """
+
 
 def get_run_log_path():
     """Determine the path for the run log file."""
@@ -46,21 +45,44 @@ def get_run_log_path():
 log_path = get_run_log_path()
 logger = get_logger(log_path, module_name="Receiver")
 
+
 def parse_cli_args():
     """Parse CLI arguments for Fusion2X video/image processing."""
     parser = argparse.ArgumentParser(
         description="Fusion2X: AI Video Frame Interpolation and Upscaling Tool"
     )
-    parser.add_argument('--config', type=str, help='Path to JSON config file (preferred for complex tasks)')
-    parser.add_argument('--task', type=str, choices=['upscaling', 'interpolation', 'both'], help='Task to perform')
+    parser.add_argument(
+        '--config',
+        type=str,
+        help='Path to JSON config file (preferred for complex tasks)'
+    )
+    parser.add_argument(
+        '--task',
+        type=str,
+        choices=['upscaling', 'interpolation', 'both'],
+        help='Task to perform'
+    )
     parser.add_argument('--input_path', type=str, help='Input file or directory')
-    parser.add_argument('--output_path', type=str, help='Export/output file or directory (optional)')
-    parser.add_argument('--input_format', type=str, help='Input file format (e.g., mp4, png)')
-    parser.add_argument('--output_format', type=str, help='Output file format (e.g., mp4, png)')
+    parser.add_argument(
+        '--output_path',
+        type=str,
+        help='Export/output file or directory (optional)'
+    )
+    parser.add_argument(
+        '--input_format',
+        type=str,
+        help='Input file format (e.g., mp4, png)'
+    )
+    parser.add_argument(
+        '--output_format',
+        type=str,
+        help='Output file format (e.g., mp4, png)'
+    )
     # (Add more argument options as needed for models/params...)
 
     args = parser.parse_args()
     return args
+
 
 def build_json_from_args(args):
     """
@@ -78,6 +100,7 @@ def build_json_from_args(args):
     # Remove None fields (if args not supplied)
     request = {k: v for k, v in request.items() if v is not None}
     return request
+
 
 def main():
     try:

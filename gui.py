@@ -1,17 +1,35 @@
-import os, sys, json, subprocess, datetime, random, string
-from PyQt5.QtWidgets import (
-    QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout,
-    QFileDialog, QComboBox, QLineEdit, QTextEdit, QTabWidget, QSpinBox, QCheckBox
+import os
+import sys
+import json
+import subprocess
+import datetime
+import random
+import string
+
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "utils"))
+)  # noqa: E402
+from PyQt5.QtWidgets import (  # noqa: E402
+    QApplication,
+    QWidget,
+    QLabel,
+    QPushButton,
+    QVBoxLayout,
+    QHBoxLayout,
+    QFileDialog,
+    QComboBox,
+    QLineEdit,
+    QTextEdit,
+    QTabWidget,
+    QSpinBox,
+    QCheckBox,
 )
-from PyQt5.QtCore import Qt
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "utils")))
-
-from utils.logger import get_logger
+from utils.logger import get_logger  # noqa: E402
 gui_log_path = os.path.join("logs", "gui.log")
 os.makedirs("logs", exist_ok=True)
 logger = get_logger(gui_log_path, module_name="GUI")
-
 
 
 def make_log_filename():
@@ -32,6 +50,7 @@ UPSCALE_MODELS = [
 INTERP_MODELS = [
     "rife-ncnn-vulkan"
 ]
+
 
 class Fusion2XGUI(QWidget):
     def __init__(self):
@@ -196,7 +215,6 @@ class Fusion2XGUI(QWidget):
         if not self.output_line.text().strip():
             self.output_line.setText(os.path.dirname(path))
 
-
     def browse_output(self):
         path = QFileDialog.getExistingDirectory(self, "Select output directory")
         if path:
@@ -314,8 +332,6 @@ class Fusion2XGUI(QWidget):
         }
         return config
 
-from PyQt5.QtWidgets import QLineEdit
-from PyQt5.QtCore import Qt
 
 class DropLineEdit(QLineEdit):
     def __init__(self, *args, on_drop_callback=None, **kwargs):

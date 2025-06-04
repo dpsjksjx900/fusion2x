@@ -1,4 +1,6 @@
-def build_result_signal(status, output_path=None, log_path=None, message="", extra=None):
+def build_result_signal(
+    status, output_path=None, log_path=None, message="", extra=None
+):
     """
     Builds a result signal dictionary.
     """

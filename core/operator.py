@@ -1,10 +1,8 @@
 import os
-import sys
-import json
 import shutil
-import time
 import traceback
 from datetime import datetime
+
 from media.video_decoder import extract_frames
 from media.video_encoder import encode_video
 from media.image_handler import process_image
@@ -12,18 +10,19 @@ from handlers.upscaling_handler import run_upscaling
 from handlers.interpolation_handler import run_interpolation
 from utils.logger import get_logger
 from utils.file_utils import create_temp_folder, safe_rename, move_file
-from utils.signal_utils import build_result_signal
 
 """
 Fusion2X Operator
 -----------------
-Main pipeline controller for Fusion2X. Receives a validated JSON request from the receiver,
-coordinates temp folder setup, orchestrates decoding, upscaling, interpolation, and encoding,
-handles all error signaling, and returns a status/result object.
+Main pipeline controller for Fusion2X. Receives a validated JSON request from
+the receiver, coordinates temp folder setup, orchestrates decoding, upscaling,
+interpolation, and encoding, handles all error signaling, and returns a
+status/result object.
 
 Input: JSON request object (dict)
 Output: JSON result dict (status, output_path, log_path, message, etc.)
 """
+
 
 def get_run_log_path():
     """Determine the path for the operator log file."""
@@ -39,6 +38,7 @@ def get_run_log_path():
     rid = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
     os.makedirs("logs", exist_ok=True)
     return os.path.join("logs", f"fusion2x_{dt}_{rid}.log")
+
 
 log_path = get_run_log_path()
 logger = get_logger(log_path, module_name="Operator")
@@ -197,7 +197,6 @@ def process_request(json_request):
             return result
 
     except Exception as e:
-        import traceback
         msg = f"Exception occurred: {e}\n{traceback.format_exc()}"
         logger.error(msg)
         return {
