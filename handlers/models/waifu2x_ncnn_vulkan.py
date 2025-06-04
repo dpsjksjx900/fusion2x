@@ -6,12 +6,12 @@ supported_waifu2x_ncnn_vulkan_params = [
     "waifu2x_exe_path",   # Path to waifu2x-ncnn-vulkan.exe (optional if using default)
     "scale",              # Scale factor (1, 2, 4, etc.)
     "noise_level",        # Denoise level (0, 1, 2, 3)
-    "mode",               # 'noise', 'scale', or 'noise_scale'
     "model_dir",          # Model directory to use (e.g., models-upconv_7_photo, optional)
     "output_format",      # Output format: png, jpg, etc.
     "gpu_id",             # GPU selection (integer, optional)
     "threads",            # Thread count (optional)
     "tile_size",          # Tile size (optional)
+    "tta",                # Enable TTA mode (boolean, optional)
 ]
 
 def find_default_waifu2x_exe():
@@ -43,12 +43,12 @@ def run_waifu2x_ncnn_vulkan(frame_dir, params, logger):
 
     scale = params.get("scale", 2)
     noise_level = params.get("noise_level", 2)
-    mode = params.get("mode", "noise_scale")
     model_dir = params.get("model_dir")  # e.g., "models-upconv_7_photo"
     output_format = params.get("output_format", "png")
     gpu_id = params.get("gpu_id", 0)
     threads = params.get("threads", 2)
     tile_size = params.get("tile_size", 0)  # 0 = auto
+    tta = params.get("tta", False)
 
     # If model_dir is not given, use a default inside the waifu2x folder
     if not model_dir:
@@ -59,18 +59,27 @@ def run_waifu2x_ncnn_vulkan(frame_dir, params, logger):
 
     cmd = [
         exe_path,
-        "-i", frame_dir,
-        "-o", output_dir,
-        "-n", str(noise_level),
-        "-s", str(scale),
-        "-m", mode,
-        "-f", output_format,
-        "-t", str(gpu_id),
-        "-j", str(threads),
-        "-x", model_dir
+        "-i",
+        frame_dir,
+        "-o",
+        output_dir,
+        "-n",
+        str(noise_level),
+        "-s",
+        str(scale),
+        "-m",
+        model_dir,
+        "-f",
+        output_format,
+        "-g",
+        str(gpu_id),
+        "-j",
+        str(threads),
     ]
     if tile_size:
-        cmd.extend(["-T", str(tile_size)])
+        cmd += ["-t", str(tile_size)]
+    if tta:
+        cmd.append("-x")
 
     logger.info(f"[waifu2x-ncnn-vulkan] Running: {' '.join(str(x) for x in cmd)}")
     subprocess.run(cmd, check=True)
