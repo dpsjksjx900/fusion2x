@@ -8,6 +8,10 @@
    - You can also run `python gui.py` directly if you manage your own environment.
 3. The Fusion2X GUI will launch. All logs are saved in `logs/`.
 
+
 ## To update Fusion2X
 
-- Pull new code, then run the same batch/shell script. It will update everything in your venv and models.
+- Run `update_fusion2x.bat` (Windows) or `bash update_fusion2x.sh` (Mac/Linux)
+  from the Fusion2X folder. The script will clone the official repository if it
+  is missing, then pull the newest code and refresh all Python dependencies in
+  the `.venv` environment.
