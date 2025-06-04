@@ -62,5 +62,10 @@ def run_realsr_ncnn_vulkan(frame_dir, params, logger):
         cmd.extend(["-t", str(tile_size)])
 
     logger.info(f"[realsr-ncnn-vulkan] Running: {' '.join(str(x) for x in cmd)}")
-    subprocess.run(cmd, check=True)
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        logger.error(f"Model process failed with code {result.returncode}")
+        logger.error(result.stdout)
+        logger.error(result.stderr)
+        result.check_returncode()
     logger.info(f"[realsr-ncnn-vulkan] Finished upscaling.")

@@ -77,6 +77,11 @@ def run_rife_ncnn_vulkan(frame_dir, params, logger):
         cmd.append("--uhd")
 
     logger.info(f"[rife-ncnn-vulkan] Running: {' '.join(str(x) for x in cmd)}")
-    subprocess.run(cmd, check=True)
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        logger.error(f"Model process failed with code {result.returncode}")
+        logger.error(result.stdout)
+        logger.error(result.stderr)
+        result.check_returncode()
     logger.info(f"[rife-ncnn-vulkan] Finished interpolation.")
 

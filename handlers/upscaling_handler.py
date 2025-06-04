@@ -3,6 +3,7 @@ from handlers.models.realesrgan_ncnn_vulkan import run_realesrgan_ncnn_vulkan, s
 from handlers.models.realcugan_ncnn_vulkan import run_realcugan_ncnn_vulkan, supported_realcugan_ncnn_vulkan_params
 from handlers.models.realsr_ncnn_vulkan import run_realsr_ncnn_vulkan, supported_realsr_ncnn_vulkan_params
 from handlers.models.srmd_ncnn_vulkan import run_srmd_ncnn_vulkan, supported_srmd_ncnn_vulkan_params
+import subprocess
 
 # Central registry: key = model name, value = (runner function, supported_params)
 MODEL_REGISTRY = {
@@ -38,6 +39,9 @@ def run_upscaling(frame_dir, upscaling_params, logger):
         logger.info(f"Running upscaling model: {model_name}")
         model_func(frame_dir=frame_dir, params=params, logger=logger)
         return {"success": True, "message": "Upscaling completed."}
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Upscaling model '{model_name}' failed: {e}")
+        return {"success": False, "message": e.stderr}
     except Exception as e:
         logger.error(f"Upscaling model '{model_name}' failed: {e}")
         return {"success": False, "message": str(e)}

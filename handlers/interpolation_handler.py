@@ -1,4 +1,5 @@
 from handlers.models.rife_ncnn_vulkan import run_rife_ncnn_vulkan, supported_rife_ncnn_vulkan_params
+import subprocess
 
 # Central registry: key = model name, value = (runner function, supported_params)
 MODEL_REGISTRY = {
@@ -31,6 +32,9 @@ def run_interpolation(frame_dir, interpolation_params, logger):
         logger.info(f"Running interpolation model: {model_name}")
         model_func(frame_dir=frame_dir, params=params, logger=logger)
         return {"success": True, "message": "Interpolation completed."}
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Interpolation model '{model_name}' failed: {e}")
+        return {"success": False, "message": e.stderr}
     except Exception as e:
         logger.error(f"Interpolation model '{model_name}' failed: {e}")
         return {"success": False, "message": str(e)}
