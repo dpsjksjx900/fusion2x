@@ -41,7 +41,7 @@ def get_run_log_path():
     return os.path.join("logs", f"fusion2x_{dt}_{rid}.log")
 
 log_path = get_run_log_path()
-logger = get_logger(log_path, module_name="Receiver")
+logger = get_logger(log_path, module_name="Operator")
 
 
 def find_model_executable(model_root, model_name, exe_name=None):
