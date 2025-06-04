@@ -26,18 +26,16 @@ Output:
 """
 
 def get_run_log_path():
-    if "FUSION2X_LOG_PATH" in os.environ:
-        return os.environ["FUSION2X_LOG_PATH"]
-    try:
-        if not sys.stdin.isatty():
-            peek = sys.stdin.read()
-            conf = json.loads(peek)
-            if isinstance(conf, dict) and "log_path" in conf:
-                return conf["log_path"]
-    except Exception:
-        pass
-    # fallback: make a new log (should almost never happen)
-    import datetime, random, string
+    """Determine the path for the run log file."""
+    env_path = os.environ.get("FUSION2X_LOG_PATH")
+    if env_path:
+        return env_path
+
+    # fallback: generate a new log file path
+    import datetime
+    import random
+    import string
+
     dt = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     rid = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
     os.makedirs("logs", exist_ok=True)
