@@ -1,11 +1,13 @@
 import json
 
+
 def load_json_from_file(json_file):
     """
     Loads and parses a JSON file. Returns the loaded dict.
     """
     with open(json_file, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 def validate_json_request(request):
     """
@@ -21,8 +23,14 @@ def validate_json_request(request):
     if task == "upscaling" and "upscaling" not in request:
         return False, "Task is 'upscaling' but no 'upscaling' block found."
     if task == "interpolation" and "interpolation" not in request:
-        return False, "Task is 'interpolation' but no 'interpolation' block found."
-    if task == "both" and ("upscaling" not in request or "interpolation" not in request):
-        return False, "Task is 'both' but required blocks are missing."
+        return False, (
+            "Task is 'interpolation' but no 'interpolation' block found."
+        )
+    if task == "both" and (
+        "upscaling" not in request or "interpolation" not in request
+    ):
+        return False, (
+            "Task is 'both' but required blocks are missing."
+        )
     # All checks passed
     return True, ""

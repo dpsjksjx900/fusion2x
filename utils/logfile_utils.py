@@ -1,4 +1,8 @@
-import os, datetime, random, string
+import os
+import datetime
+import random
+import string
+
 
 def make_log_filename():
     dt = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")

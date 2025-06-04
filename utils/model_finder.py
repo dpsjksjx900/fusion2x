@@ -1,5 +1,6 @@
 import os
 
+
 def find_model_executable(base_dir, model_name, exe_name=None, logger=None):
     """
     Searches for the given model's executable (.exe) in all subfolders and their subsubfolders of base_dir.
@@ -16,7 +17,8 @@ def find_model_executable(base_dir, model_name, exe_name=None, logger=None):
     """
     exe_name = exe_name or (model_name + ".exe")
     if not os.path.exists(base_dir):
-        if logger: logger.error(f"Model root {base_dir} does not exist!")
+        if logger:
+            logger.error(f"Model root {base_dir} does not exist!")
         return None
 
     # Check all immediate subfolders
@@ -27,7 +29,8 @@ def find_model_executable(base_dir, model_name, exe_name=None, logger=None):
         # Check in subfolder itself
         candidate = os.path.join(subfolder_path, exe_name)
         if os.path.isfile(candidate):
-            if logger: logger.info(f"Found model exe: {candidate}")
+            if logger:
+                logger.info(f"Found model exe: {candidate}")
             return candidate
         # Check in subsubfolders
         for subsubfolder in os.listdir(subfolder_path):
@@ -36,9 +39,15 @@ def find_model_executable(base_dir, model_name, exe_name=None, logger=None):
                 continue
             candidate2 = os.path.join(subsubfolder_path, exe_name)
             if os.path.isfile(candidate2):
-                if logger: logger.info(f"Found model exe: {candidate2}")
+                if logger:
+                    logger.info(f"Found model exe: {candidate2}")
                 return candidate2
-            if logger: logger.debug(f"Checked: {subsubfolder_path}")
-        if logger: logger.debug(f"Checked: {subfolder_path}")
-    if logger: logger.error(f"{exe_name} not found in any subfolder or subsubfolder of {base_dir}")
+            if logger:
+                logger.debug(f"Checked: {subsubfolder_path}")
+        if logger:
+            logger.debug(f"Checked: {subfolder_path}")
+    if logger:
+        logger.error(
+            f"{exe_name} not found in any subfolder or subsubfolder of {base_dir}"
+        )
     return None
