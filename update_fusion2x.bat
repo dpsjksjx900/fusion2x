@@ -6,11 +6,23 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-REM Pull latest code
-git pull
-if %ERRORLEVEL% NEQ 0 (
-    echo Failed to pull latest code.
-    exit /b %ERRORLEVEL%
+
+REM Pull latest code or clone if missing
+set REPO_URL=https://github.com/dpsjksjx900/fusion2x.git
+if not exist .git (
+    echo Cloning Fusion2X repository...
+    git init
+    git remote add origin %REPO_URL%
+    git fetch origin
+    git checkout -f origin/main
+) else (
+    git pull --ff-only origin main
+    if %ERRORLEVEL% NEQ 0 git pull --ff-only
+    if %ERRORLEVEL% NEQ 0 (
+        echo Failed to pull latest code.
+        exit /b %ERRORLEVEL%
+    )
+
 )
 
 REM Update Python dependencies
