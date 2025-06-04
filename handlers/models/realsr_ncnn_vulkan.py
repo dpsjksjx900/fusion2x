@@ -59,7 +59,7 @@ def run_realsr_ncnn_vulkan(frame_dir, params, logger):
         "-j", str(threads)
     ]
     if tile_size:
-        cmd.extend(["-T", str(tile_size)])
+        cmd.extend(["-t", str(tile_size)])
 
     logger.info(f"[realsr-ncnn-vulkan] Running: {' '.join(str(x) for x in cmd)}")
     subprocess.run(cmd, check=True)

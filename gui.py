@@ -303,7 +303,6 @@ class Fusion2XGUI(QWidget):
                 "params": {
                     "scale": self.upscale_scale.value(),
                     "noise_level": self.upscale_noise.value(),
-                    "mode": "noise_scale",
                     "output_format": self.upscale_output_format.currentText(),
                     "gpu_id": self.upscale_gpu.value(),
                     "threads": self.upscale_threads.value()

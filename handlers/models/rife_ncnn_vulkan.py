@@ -56,16 +56,23 @@ def run_rife_ncnn_vulkan(frame_dir, params, logger):
 
     cmd = [
         exe_path,
-        "-i", frame_dir,
-        "-o", output_dir,
-        "-x", str(times),
-        "-m", model,
-        "-f", fmt,
-        "-t", str(threads),
-        "-g", str(gpu_id)
+        "-i",
+        frame_dir,
+        "-o",
+        output_dir,
+        "-n",
+        str(times),
+        "-m",
+        model,
+        "-f",
+        fmt,
+        "-j",
+        str(threads),
+        "-g",
+        str(gpu_id),
     ]
     if tta_mode:
-        cmd.append("--tta")
+        cmd.append("-x")
     if uhd_mode:
         cmd.append("--uhd")
 
