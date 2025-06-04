@@ -11,7 +11,9 @@
 
 ## To update Fusion2X
 
+
 - Run `update_fusion2x.bat` (Windows) or `bash update_fusion2x.sh` (Mac/Linux)
   from the Fusion2X folder. The script will clone the official repository if it
   is missing, then pull the newest code and refresh all Python dependencies in
   the `.venv` environment.
+

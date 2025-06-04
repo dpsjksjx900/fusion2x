@@ -7,6 +7,7 @@ if ! command -v git >/dev/null 2>&1; then
   exit 1
 fi
 
+
 # Pull latest code from the configured remote or clone if missing
 REPO_URL="https://github.com/dpsjksjx900/fusion2x.git"
 if [ ! -d ".git" ]; then
@@ -18,6 +19,7 @@ if [ ! -d ".git" ]; then
 else
   git pull --ff-only origin main || git pull --ff-only
 fi
+
 
 # Update Python dependencies
 if [ ! -d ".venv" ]; then

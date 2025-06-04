@@ -6,6 +6,7 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
+
 REM Pull latest code or clone if missing
 set REPO_URL=https://github.com/dpsjksjx900/fusion2x.git
 if not exist .git (
@@ -21,6 +22,7 @@ if not exist .git (
         echo Failed to pull latest code.
         exit /b %ERRORLEVEL%
     )
+
 )
 
 REM Update Python dependencies
