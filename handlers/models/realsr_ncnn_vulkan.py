@@ -1,6 +1,7 @@
 import os
 import subprocess
 from utils.model_finder import find_model_executable
+from utils.process_utils import run_model_command
 
 supported_realsr_ncnn_vulkan_params = [
     "realsr_exe_path",     # Path to realsr-ncnn-vulkan.exe (optional)
@@ -61,11 +62,5 @@ def run_realsr_ncnn_vulkan(frame_dir, params, logger):
     if tile_size:
         cmd.extend(["-t", str(tile_size)])
 
-    logger.info(f"[realsr-ncnn-vulkan] Running: {' '.join(str(x) for x in cmd)}")
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    if result.returncode != 0:
-        logger.error(f"Model process failed with code {result.returncode}")
-        logger.error(result.stdout)
-        logger.error(result.stderr)
-        result.check_returncode()
+    run_model_command(cmd, logger)
     logger.info(f"[realsr-ncnn-vulkan] Finished upscaling.")

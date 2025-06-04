@@ -1,6 +1,7 @@
 import os
 import subprocess
 from utils.model_finder import find_model_executable
+from utils.process_utils import run_model_command
 
 supported_rife_ncnn_vulkan_params = [
     "rife_exe_path",     # Path to rife-ncnn-vulkan.exe (optional if using default)
@@ -76,12 +77,6 @@ def run_rife_ncnn_vulkan(frame_dir, params, logger):
     if uhd_mode:
         cmd.append("--uhd")
 
-    logger.info(f"[rife-ncnn-vulkan] Running: {' '.join(str(x) for x in cmd)}")
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    if result.returncode != 0:
-        logger.error(f"Model process failed with code {result.returncode}")
-        logger.error(result.stdout)
-        logger.error(result.stderr)
-        result.check_returncode()
+    run_model_command(cmd, logger)
     logger.info(f"[rife-ncnn-vulkan] Finished interpolation.")
 
