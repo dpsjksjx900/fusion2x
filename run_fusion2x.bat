@@ -15,7 +15,7 @@ if not exist logs (
 )
 
 REM 4. Run the Python entrypoint
-python run_fusion2x.py
+python gui.py
 
 REM 5. Pause so you can read any errors
 pause
