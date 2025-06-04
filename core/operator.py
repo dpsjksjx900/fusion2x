@@ -134,8 +134,10 @@ def process_request(json_request):
             export_dir = json_request.get("output_path") or file_dir
             os.makedirs(export_dir, exist_ok=True)
             final_name = f"{file_base}_fusion2x_{now_str}{file_ext}"
-            final_path = os.path.join(export_dir, final_name)
-            move_file(out_video_path, export_dir)
+            # Move the encoded video to the export directory and capture its new location
+            moved_path = move_file(out_video_path, export_dir)
+            # Rename to the final desired name
+            final_path = safe_rename(moved_path, final_name)
             logger.info(f"Moved processed video to: {final_path}")
 
             # Cleanup
