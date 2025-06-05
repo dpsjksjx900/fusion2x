@@ -123,14 +123,15 @@ def process_request(json_request):
             logger.info("Starting video encoding.")
             target_fps = metadata.get("fps", 30)
             target_res = metadata.get("resolution", None)
-            out_video_path = os.path.join(temp_folder, f"{file_base}_fusion2x_{now_str}.mp4")
+            output_ext = "." + json_request.get("output_format", "mp4").lstrip(".")
+            out_video_path = os.path.join(temp_folder, f"{file_base}_fusion2x_{now_str}{output_ext}")
             encode_video(frames_dir, out_video_path, fps=target_fps, resolution=target_res, logger=logger)
             logger.info(f"Video encoding complete: {out_video_path}")
 
             # Move result to output directory
             export_dir = json_request.get("output_path") or file_dir
             os.makedirs(export_dir, exist_ok=True)
-            final_name = f"{file_base}_fusion2x_{now_str}{file_ext}"
+            final_name = f"{file_base}_fusion2x_{now_str}{output_ext}"
             # Move the encoded video to the export directory and capture its new location
             moved_path = move_file(out_video_path, export_dir)
             # Rename to the final desired name
@@ -173,7 +174,8 @@ def process_request(json_request):
             # Move final image to export dir
             export_dir = json_request.get("output_path") or file_dir
             os.makedirs(export_dir, exist_ok=True)
-            final_name = f"{file_base}_fusion2x_{now_str}{file_ext}"
+            output_ext = "." + json_request.get("output_format", file_ext.lstrip(".")).lstrip(".")
+            final_name = f"{file_base}_fusion2x_{now_str}{output_ext}"
             final_path = os.path.join(export_dir, final_name)
             process_image(frames_dir, final_path, logger=logger)
             logger.info(f"Moved processed image to: {final_path}")
