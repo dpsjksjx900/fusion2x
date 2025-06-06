@@ -40,3 +40,7 @@ problem with the underlying GPU or runtime libraries. To resolve this:
 After installing the required drivers and runtime components, try running
 Fusion2X again.
 
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
