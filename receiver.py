@@ -101,24 +101,30 @@ def main():
     try:
         logger.info("Fusion2X receiver started.")
 
-        # Read job request as JSON from stdin
-        input_data = ""
-        if not sys.stdin.isatty():
-            input_data = sys.stdin.read()
-            logger.info("Received JSON from stdin.")
+        if len(sys.argv) > 1:
+            # CLI invocation with arguments
+            args = parse_cli_args()
+            json_request = build_json_from_args(args)
+            logger.info("Received job config from CLI args.")
         else:
-            logger.error("No input received. Exiting.")
-            print(json.dumps({"status": "error", "message": "No input provided.", "log_path": log_path}))
-            sys.exit(1)
+            # Read job request as JSON from stdin
+            input_data = ""
+            if not sys.stdin.isatty():
+                input_data = sys.stdin.read()
+                logger.info("Received JSON from stdin.")
+            else:
+                logger.error("No input received. Exiting.")
+                print(json.dumps({"status": "error", "message": "No input provided.", "log_path": log_path}))
+                sys.exit(1)
 
-        try:
-            json_request = json.loads(input_data)
-        except Exception as e:
-            logger.error(f"Failed to parse input JSON: {e}")
-            print(json.dumps({"status": "error", "message": "Failed to parse input JSON.", "log_path": log_path}))
-            sys.exit(1)
+            try:
+                json_request = json.loads(input_data)
+            except Exception as e:
+                logger.error(f"Failed to parse input JSON: {e}")
+                print(json.dumps({"status": "error", "message": "Failed to parse input JSON.", "log_path": log_path}))
+                sys.exit(1)
 
-        logger.info(f"Received job config: {json.dumps(json_request, indent=2)}")
+            logger.info(f"Received job config: {json.dumps(json_request, indent=2)}")
 
         # Add log_path to the request, if not already present
         if "log_path" not in json_request:
