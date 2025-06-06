@@ -8,6 +8,17 @@
    - You can also run `python gui.py` directly if you manage your own environment.
 3. The Fusion2X GUI will launch. All logs are saved in `logs/`.
 
+### CLI usage
+
+You can also submit jobs directly from the command line:
+
+```bash
+python receiver.py --task upscaling --input_path input.png --output_path out_dir \
+    --input_format png --output_format png
+```
+
+The command prints a JSON result containing the output path and log location.
+
 
 ## To update Fusion2X
 
