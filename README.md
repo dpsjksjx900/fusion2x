@@ -17,3 +17,11 @@
   is missing, then pull the newest code and refresh all Python dependencies in
   the `.venv` environment.
 
+## Troubleshooting
+
+If Fusion2X fails to start on Windows with an error about `vcruntime140.dll`
+or `vcruntime140_1.dll`, run `run_fusion2x.bat` again. The batch script now
+executes `python install_fusion2x.py`, which downloads and installs the
+Microsoft Visual C++ runtime silently if it is missing. You can also run the
+installer manually with `python install_fusion2x.py`.
+

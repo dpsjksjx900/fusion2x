@@ -4,6 +4,8 @@ import shutil
 import platform
 import os
 
+from utils import env_setup
+
 REQUIREMENTS = [
     "tqdm",
     "jsonschema",
@@ -63,9 +65,27 @@ def print_model_binary_instructions():
     print("    Download the required binaries and specify their paths in your Fusion2X config file.")
     print("    Or add them to your system PATH for easier usage.")
 
+
+def install_win_runtime():
+    """Ensure the Microsoft Visual C++ runtime is installed on Windows."""
+    if platform.system().lower() != "windows":
+        return
+    print("[*] Checking for Visual C++ runtime...")
+    if env_setup.vc_runtime_installed():
+        print("[+] Visual C++ runtime detected.")
+        return
+
+    print("[!] Visual C++ runtime missing. Installing...")
+    try:
+        env_setup.install_vc_runtime()
+        print("[+] Visual C++ runtime installed.")
+    except Exception as exc:
+        print(f"[-] Failed to install Visual C++ runtime: {exc}")
+
 def main():
     print_header()
     check_python_version()
+    install_win_runtime()
     pip_install(load_requirements())
     check_ffmpeg()
     print_model_binary_instructions()
