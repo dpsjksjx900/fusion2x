@@ -44,6 +44,7 @@ INTERP_MODELS = [
     "rife-ncnn-vulkan"
 ]
 VIDEO_OUTPUT_FORMATS = ["mp4", "gif", "webm", "avi", "mov", "mkv"]
+IMAGE_OUTPUT_FORMATS = ["png", "jpg"]
 
 
 class Fusion2XGUI(QWidget):
@@ -82,6 +83,10 @@ class Fusion2XGUI(QWidget):
         self.video_output_combo.addItems(VIDEO_OUTPUT_FORMATS)
         format_layout.addWidget(QLabel("Video output format:"))
         format_layout.addWidget(self.video_output_combo)
+        self.image_output_combo = QComboBox()
+        self.image_output_combo.addItems(IMAGE_OUTPUT_FORMATS)
+        format_layout.addWidget(QLabel("Image output format:"))
+        format_layout.addWidget(self.image_output_combo)
 
         # Processing option groups
         self.upscale_group = self.make_upscale_group()
@@ -131,11 +136,6 @@ class Fusion2XGUI(QWidget):
 
         layout.addLayout(hl)
 
-        self.upscale_output_format = QComboBox()
-        self.upscale_output_format.addItems(["png", "jpg"])
-        layout.addWidget(QLabel("Output format:"))
-        layout.addWidget(self.upscale_output_format)
-
         self.upscale_threads = QSpinBox()
         self.upscale_threads.setRange(1, 16)
         self.upscale_threads.setValue(2)
@@ -182,11 +182,6 @@ class Fusion2XGUI(QWidget):
         hl.addWidget(self.interp_gpu)
 
         layout.addLayout(hl)
-
-        self.interp_output_format = QComboBox()
-        self.interp_output_format.addItems(["png", "jpg"])
-        layout.addWidget(QLabel("Output format:"))
-        layout.addWidget(self.interp_output_format)
 
         self.tta_checkbox = QCheckBox("Enable TTA Mode")
         self.uhd_checkbox = QCheckBox("Enable UHD Mode")
@@ -281,10 +276,7 @@ class Fusion2XGUI(QWidget):
         if input_format in video_formats:
             output_format = self.video_output_combo.currentText()
         else:
-            if up_enabled:
-                output_format = self.upscale_output_format.currentText()
-            else:
-                output_format = self.interp_output_format.currentText()
+            output_format = self.image_output_combo.currentText()
 
         config = {
             "task": task,
@@ -301,7 +293,7 @@ class Fusion2XGUI(QWidget):
                 "params": {
                     "scale": self.upscale_scale.value(),
                     "noise_level": self.upscale_noise.value(),
-                    "output_format": self.upscale_output_format.currentText(),
+                    "output_format": self.image_output_combo.currentText(),
                     "gpu_id": self.upscale_gpu.value(),
                     "threads": self.upscale_threads.value()
                 }
@@ -313,7 +305,7 @@ class Fusion2XGUI(QWidget):
                 "model_name": self.interp_model_combo.currentText(),
                 "params": {
                     "times": self.interp_times.value(),
-                    "output_format": self.interp_output_format.currentText(),
+                    "output_format": self.image_output_combo.currentText(),
                     "threads": self.interp_threads.value(),
                     "gpu_id": self.interp_gpu.value(),
                     "tta_mode": self.tta_checkbox.isChecked(),
