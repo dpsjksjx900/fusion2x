@@ -66,6 +66,28 @@ def process_request(json_request):
         original_file = os.path.abspath(json_request["input_path"])
         file_dir, file_name = os.path.split(original_file)
         file_base, file_ext = os.path.splitext(file_name)
+        in_fmt = json_request["input_format"].lower()
+        out_fmt = json_request.get("output_format", "").lower()
+        video_fmts = {"mp4", "avi", "mov", "mkv", "webm", "gif"}
+        image_fmts = {"png", "jpg", "jpeg", "webp"}
+        if in_fmt in video_fmts and out_fmt not in video_fmts:
+            msg = f"Output format '{out_fmt}' is not valid for video input"
+            logger.error(msg)
+            return {
+                "status": "error",
+                "log_path": log_path,
+                "message": msg,
+                "output_path": None,
+            }
+        if in_fmt in image_fmts and out_fmt not in image_fmts:
+            msg = f"Output format '{out_fmt}' is not valid for image input"
+            logger.error(msg)
+            return {
+                "status": "error",
+                "log_path": log_path,
+                "message": msg,
+                "output_path": None,
+            }
         now_str = datetime.now().strftime("%Y%m%d_%H%M%S")
         temp_folder = create_temp_folder(base_dir=file_dir, base_name=file_base, timestamp=now_str)
         os.makedirs("logs", exist_ok=True)
@@ -119,7 +141,14 @@ def process_request(json_request):
             target_res = metadata.get("resolution", None)
             output_ext = "." + json_request.get("output_format", "mp4").lstrip(".")
             out_video_path = os.path.join(temp_folder, f"{file_base}_fusion2x_{now_str}{output_ext}")
-            encode_video(frames_dir, out_video_path, fps=target_fps, resolution=target_res, logger=logger)
+            encode_video(
+                frames_dir,
+                out_video_path,
+                fps=target_fps,
+                resolution=target_res,
+                format=json_request.get("output_format", "mp4"),
+                logger=logger,
+            )
             logger.info(f"Video encoding complete: {out_video_path}")
 
             # Move result to output directory
