@@ -1,5 +1,6 @@
 import os
 import subprocess
+from utils.process_utils import require_binaries
 
 def extract_frames(video_path, output_dir, output_format="png", logger=None):
     """
@@ -15,6 +16,7 @@ def extract_frames(video_path, output_dir, output_format="png", logger=None):
     Returns:
         dict: Metadata with keys frame_count, resolution, fps.
     """
+    require_binaries(["ffmpeg", "ffprobe"])
     if not os.path.exists(output_dir):
         os.makedirs(output_dir, exist_ok=True)
     # ffmpeg command

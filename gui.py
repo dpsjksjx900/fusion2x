@@ -2,9 +2,6 @@ import os
 import sys
 import json
 import subprocess
-import datetime
-import random
-import string
 
 sys.path.insert(
     0,
@@ -27,16 +24,12 @@ from PyQt5.QtWidgets import (  # noqa: E402
 )
 
 from utils.logger import get_logger  # noqa: E402
+from utils.logfile_utils import make_log_filename
 gui_log_path = os.path.join("logs", "gui.log")
 os.makedirs("logs", exist_ok=True)
 logger = get_logger(gui_log_path, module_name="GUI")
 
 
-def make_log_filename():
-    dt = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    rid = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
-    os.makedirs("logs", exist_ok=True)
-    return os.path.join("logs", f"fusion2x_{dt}_{rid}.log")
 
 
 # Model options (update if you add more in handlers)

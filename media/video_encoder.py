@@ -1,5 +1,6 @@
 import os
 import subprocess
+from utils.process_utils import require_binaries
 
 def encode_video(frame_dir, output_path, fps=30, resolution=None, format="mp4", logger=None):
     """
@@ -13,6 +14,7 @@ def encode_video(frame_dir, output_path, fps=30, resolution=None, format="mp4", 
         format (str): Output video format, default mp4.
         logger: Logger instance.
     """
+    require_binaries(["ffmpeg"])
     input_pattern = os.path.join(frame_dir, "frame_%06d.png")
     cmd = [
         "ffmpeg", "-framerate", str(fps), "-i", input_pattern
