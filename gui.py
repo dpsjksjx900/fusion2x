@@ -21,9 +21,9 @@ from PyQt5.QtWidgets import (  # noqa: E402
     QComboBox,
     QLineEdit,
     QTextEdit,
-    QTabWidget,
     QSpinBox,
     QCheckBox,
+    QGroupBox,
 )
 
 from utils.logger import get_logger  # noqa: E402
@@ -83,20 +83,9 @@ class Fusion2XGUI(QWidget):
         out_layout.addWidget(self.output_line)
         out_layout.addWidget(output_btn)
 
-        # Task choice
-        self.task_combo = QComboBox()
-        self.task_combo.addItems(["both", "upscaling", "interpolation"])
-        task_layout = QHBoxLayout()
-        task_layout.addWidget(QLabel("Task:"))
-        task_layout.addWidget(self.task_combo)
-        self.task_combo.currentTextChanged.connect(self.toggle_task_tabs)
-
-        # Tabs for model options
-        self.tabs = QTabWidget()
-        self.upscale_tab = self.make_upscale_tab()
-        self.interp_tab = self.make_interp_tab()
-        self.tabs.addTab(self.upscale_tab, "Upscaling")
-        self.tabs.addTab(self.interp_tab, "Interpolation")
+        # Processing option groups
+        self.upscale_group = self.make_upscale_group()
+        self.interp_group = self.make_interp_group()
 
         # Run button and log
         self.run_btn = QPushButton("Run")
@@ -107,15 +96,17 @@ class Fusion2XGUI(QWidget):
         # Layout
         layout.addLayout(file_layout)
         layout.addLayout(out_layout)
-        layout.addLayout(task_layout)
-        layout.addWidget(self.tabs)
+        layout.addWidget(self.upscale_group)
+        layout.addWidget(self.interp_group)
         layout.addWidget(self.run_btn)
         layout.addWidget(QLabel("Status Log:"))
         layout.addWidget(self.log_box)
         self.setLayout(layout)
 
-    def make_upscale_tab(self):
-        tab = QWidget()
+    def make_upscale_group(self):
+        group = QGroupBox("Upscaling")
+        group.setCheckable(True)
+        group.setChecked(True)
         layout = QVBoxLayout()
 
         self.upscale_model_combo = QComboBox()
@@ -156,11 +147,13 @@ class Fusion2XGUI(QWidget):
         layout.addWidget(QLabel("GPU ID:"))
         layout.addWidget(self.upscale_gpu)
 
-        tab.setLayout(layout)
-        return tab
+        group.setLayout(layout)
+        return group
 
-    def make_interp_tab(self):
-        tab = QWidget()
+    def make_interp_group(self):
+        group = QGroupBox("Interpolation")
+        group.setCheckable(True)
+        group.setChecked(True)
         layout = QVBoxLayout()
 
         self.interp_model_combo = QComboBox()
@@ -199,8 +192,8 @@ class Fusion2XGUI(QWidget):
         layout.addWidget(self.tta_checkbox)
         layout.addWidget(self.uhd_checkbox)
 
-        tab.setLayout(layout)
-        return tab
+        group.setLayout(layout)
+        return group
 
     def browse_input(self):
         path, _ = QFileDialog.getOpenFileName(self, "Select input file")
@@ -220,18 +213,6 @@ class Fusion2XGUI(QWidget):
         if path:
             self.output_line.setText(path)
 
-    def toggle_task_tabs(self):
-        task = self.task_combo.currentText()
-        # Enable/disable tabs based on task
-        if task == "upscaling":
-            self.tabs.setTabEnabled(0, True)
-            self.tabs.setTabEnabled(1, False)
-        elif task == "interpolation":
-            self.tabs.setTabEnabled(0, False)
-            self.tabs.setTabEnabled(1, True)
-        else:  # both
-            self.tabs.setTabEnabled(0, True)
-            self.tabs.setTabEnabled(1, True)
 
     def run_fusion2x(self):
         input_path = self.input_line.text().strip()
@@ -282,11 +263,26 @@ class Fusion2XGUI(QWidget):
 
     def collect_config(self):
         # Core config (input/output/task)
-        task = self.task_combo.currentText()
+        up_enabled = self.upscale_group.isChecked()
+        interp_enabled = self.interp_group.isChecked()
+        if up_enabled and interp_enabled:
+            task = "both"
+        elif up_enabled:
+            task = "upscaling"
+        elif interp_enabled:
+            task = "interpolation"
+        else:
+            task = "upscaling"
         input_path = self.input_line.text()
         output_path = self.output_line.text()
         input_format = os.path.splitext(input_path)[1][1:] if "." in input_path else "mp4"
-        output_format = "mp4" if input_format in ["mp4", "avi", "mkv", "mov"] else self.upscale_output_format.currentText()
+        if input_format in ["mp4", "avi", "mkv", "mov"]:
+            output_format = "mp4"
+        else:
+            if up_enabled:
+                output_format = self.upscale_output_format.currentText()
+            else:
+                output_format = self.interp_output_format.currentText()
 
         config = {
             "task": task,
@@ -296,7 +292,7 @@ class Fusion2XGUI(QWidget):
             "output_path": output_path
         }
 
-        if task in ("upscaling", "both"):
+        if up_enabled:
             config["upscaling"] = {
                 "enabled": True,
                 "model_name": self.upscale_model_combo.currentText(),
@@ -309,7 +305,7 @@ class Fusion2XGUI(QWidget):
                 }
             }
 
-        if task in ("interpolation", "both"):
+        if interp_enabled:
             config["interpolation"] = {
                 "enabled": True,
                 "model_name": self.interp_model_combo.currentText(),
