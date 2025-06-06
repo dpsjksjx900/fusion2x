@@ -17,3 +17,19 @@
   is missing, then pull the newest code and refresh all Python dependencies in
   the `.venv` environment.
 
+## Troubleshooting
+
+### "The process crashed (0xC0000005)" error
+
+If a model process exits with code `0xC0000005`, it usually means there is a
+problem with the underlying GPU or runtime libraries. To resolve this:
+
+1. **Update GPU drivers** – install the latest drivers for your graphics card
+   from the vendor's website (NVIDIA, AMD or Intel).
+2. **Install the Microsoft Visual C++ Redistributable** – on Windows make sure
+   the [Visual C++ Runtime](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist)
+   is installed.
+
+After installing the required drivers and runtime components, try running
+Fusion2X again.
+
