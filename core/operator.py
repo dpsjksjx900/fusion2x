@@ -10,6 +10,7 @@ from handlers.upscaling_handler import run_upscaling
 from handlers.interpolation_handler import run_interpolation
 from utils.logger import get_logger
 from utils.file_utils import create_temp_folder, safe_rename, move_file
+from utils.logfile_utils import make_log_filename
 
 """
 Fusion2X Operator
@@ -30,14 +31,7 @@ def get_run_log_path():
     if env_path:
         return env_path
 
-    import datetime
-    import random
-    import string
-
-    dt = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    rid = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
-    os.makedirs("logs", exist_ok=True)
-    return os.path.join("logs", f"fusion2x_{dt}_{rid}.log")
+    return make_log_filename()
 
 
 log_path = get_run_log_path()

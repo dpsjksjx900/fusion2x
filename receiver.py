@@ -3,6 +3,8 @@ import os
 import sys
 import json
 from utils.logger import get_logger
+from utils.logfile_utils import make_log_filename
+from utils.json_utils import validate_json_request
 
 """
 Fusion2X Receiver
@@ -31,14 +33,7 @@ def get_run_log_path():
         return env_path
 
     # fallback: generate a new log file path
-    import datetime
-    import random
-    import string
-
-    dt = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    rid = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
-    os.makedirs("logs", exist_ok=True)
-    return os.path.join("logs", f"fusion2x_{dt}_{rid}.log")
+    return make_log_filename()
 
 
 # Set up logger ONCE, at module level, for whole script
@@ -129,13 +124,11 @@ def main():
         if "log_path" not in json_request:
             json_request["log_path"] = log_path
 
-        # Minimal input validation
-        required = ["task", "input_path", "input_format", "output_format"]
-        missing = [k for k in required if not json_request.get(k)]
-        if missing:
-            msg = f"Missing required fields: {missing}"
-            logger.error(msg)
-            print(json.dumps({"status": "error", "message": msg, "log_path": log_path}))
+        # Validate request structure
+        valid, reason = validate_json_request(json_request)
+        if not valid:
+            logger.error(reason)
+            print(json.dumps({"status": "error", "message": reason, "log_path": log_path}))
             sys.exit(1)
 
         # Optionally, check input and output files/dirs

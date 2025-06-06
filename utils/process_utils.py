@@ -1,4 +1,14 @@
 import subprocess
+import shutil
+
+
+def require_binaries(names):
+    """Ensure each binary in names exists in PATH."""
+    for name in names:
+        if shutil.which(name) is None:
+            raise FileNotFoundError(
+                f"Required binary '{name}' not found in PATH."
+            )
 
 
 def run_model_command(cmd, logger):

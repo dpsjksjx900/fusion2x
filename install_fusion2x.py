@@ -2,12 +2,22 @@ import sys
 import subprocess
 import shutil
 import platform
+import os
 
 REQUIREMENTS = [
     "tqdm",
-    "jsonschema"
-    # Add more as needed
+    "jsonschema",
 ]
+
+
+def load_requirements():
+    """Return a list of required packages."""
+    req_path = os.path.join(os.path.dirname(__file__), "requirements.txt")
+    if os.path.exists(req_path):
+        with open(req_path, "r", encoding="utf-8") as f:
+            lines = [l.strip() for l in f.readlines()]
+        return [l for l in lines if l and not l.startswith("#")]
+    return REQUIREMENTS
 
 def print_header():
     print("="*50)
@@ -56,7 +66,7 @@ def print_model_binary_instructions():
 def main():
     print_header()
     check_python_version()
-    pip_install(REQUIREMENTS)
+    pip_install(load_requirements())
     check_ffmpeg()
     print_model_binary_instructions()
     print("\n[!] Fusion2X installation complete. You can now run the program.")
