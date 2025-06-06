@@ -19,9 +19,24 @@
 
 ## Troubleshooting
 
+
 If Fusion2X fails to start on Windows with an error about `vcruntime140.dll`
 or `vcruntime140_1.dll`, run `run_fusion2x.bat` again. The batch script now
 executes `python install_fusion2x.py`, which downloads and installs the
 Microsoft Visual C++ runtime silently if it is missing. You can also run the
 installer manually with `python install_fusion2x.py`.
+
+### "The process crashed (0xC0000005)" error
+
+If a model process exits with code `0xC0000005`, it usually means there is a
+problem with the underlying GPU or runtime libraries. To resolve this:
+
+1. **Update GPU drivers** – install the latest drivers for your graphics card
+   from the vendor's website (NVIDIA, AMD or Intel).
+2. **Install the Microsoft Visual C++ Redistributable** – on Windows make sure
+   the [Visual C++ Runtime](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist)
+   is installed.
+
+After installing the required drivers and runtime components, try running
+Fusion2X again.
 
