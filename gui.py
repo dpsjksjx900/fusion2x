@@ -43,6 +43,7 @@ UPSCALE_MODELS = [
 INTERP_MODELS = [
     "rife-ncnn-vulkan"
 ]
+VIDEO_OUTPUT_FORMATS = ["mp4", "gif", "webm", "avi", "mov", "mkv"]
 
 
 class Fusion2XGUI(QWidget):
@@ -76,6 +77,12 @@ class Fusion2XGUI(QWidget):
         out_layout.addWidget(self.output_line)
         out_layout.addWidget(output_btn)
 
+        format_layout = QHBoxLayout()
+        self.video_output_combo = QComboBox()
+        self.video_output_combo.addItems(VIDEO_OUTPUT_FORMATS)
+        format_layout.addWidget(QLabel("Video output format:"))
+        format_layout.addWidget(self.video_output_combo)
+
         # Processing option groups
         self.upscale_group = self.make_upscale_group()
         self.interp_group = self.make_interp_group()
@@ -89,6 +96,7 @@ class Fusion2XGUI(QWidget):
         # Layout
         layout.addLayout(file_layout)
         layout.addLayout(out_layout)
+        layout.addLayout(format_layout)
         layout.addWidget(self.upscale_group)
         layout.addWidget(self.interp_group)
         layout.addWidget(self.run_btn)
@@ -269,8 +277,9 @@ class Fusion2XGUI(QWidget):
         input_path = self.input_line.text()
         output_path = self.output_line.text()
         input_format = os.path.splitext(input_path)[1][1:] if "." in input_path else "mp4"
-        if input_format in ["mp4", "avi", "mkv", "mov"]:
-            output_format = "mp4"
+        video_formats = ["mp4", "avi", "mkv", "mov", "webm", "gif"]
+        if input_format in video_formats:
+            output_format = self.video_output_combo.currentText()
         else:
             if up_enabled:
                 output_format = self.upscale_output_format.currentText()

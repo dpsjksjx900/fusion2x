@@ -16,13 +16,14 @@ def encode_video(frame_dir, output_path, fps=30, resolution=None, format="mp4", 
     """
     require_binaries(["ffmpeg"])
     input_pattern = os.path.join(frame_dir, "frame_%06d.png")
-    cmd = [
-        "ffmpeg", "-framerate", str(fps), "-i", input_pattern
-    ]
+    cmd = ["ffmpeg", "-framerate", str(fps), "-i", input_pattern]
     if resolution:
         cmd += ["-s", resolution]
-    # Lossless output or user can modify as needed
-    cmd += ["-c:v", "libx264", "-pix_fmt", "yuv420p", "-y", output_path]
+    format = format.lower()
+    if format == "gif":
+        cmd += ["-y", output_path]
+    else:
+        cmd += ["-c:v", "libx264", "-pix_fmt", "yuv420p", "-y", output_path]
     if logger:
         logger.info(f"[VideoEncoder] Running: {' '.join(cmd)}")
     subprocess.run(cmd, check=True)

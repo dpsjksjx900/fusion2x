@@ -18,6 +18,20 @@ def validate_json_request(request):
     for field in required_fields:
         if field not in request:
             return False, f"Missing required field '{field}'"
+
+    video_formats = {"mp4", "avi", "mov", "mkv", "webm", "gif"}
+    image_formats = {"png", "jpg", "jpeg", "webp"}
+    input_fmt = request.get("input_format", "").lower()
+    output_fmt = request.get("output_format", "").lower()
+
+    if input_fmt in video_formats and output_fmt not in video_formats:
+        return False, (
+            f"Output format '{output_fmt}' is not valid for video input"
+        )
+    if input_fmt in image_formats and output_fmt not in image_formats:
+        return False, (
+            f"Output format '{output_fmt}' is not valid for image input"
+        )
     # Additional checks for mutually required blocks
     task = request.get("task")
     if task == "upscaling" and "upscaling" not in request:
