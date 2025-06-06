@@ -1,12 +1,12 @@
 ## How to Run Fusion2X
 
 1. Download/extract Fusion2X.
-2. Double-click `run_fusion2x.bat` (Windows) or run `bash run_fusion2x.sh` (Mac/Linux).
+2. **Windows:** Double-click `run_fusion2x.bat`.
+3. **Mac/Linux:** run `bash run_fusion2x.sh` to install dependencies, then execute `python setup_models_unix.py` once to download the model binaries.
    - These scripts set up a virtual environment and start the GUI via `gui.py`.
-   - The first run may take a few minutes while dependencies and models are downloaded.
-   - All dependencies, models, and FFmpeg will be installed automatically in the `.venv` and `models/` folders.
+   - The first run may take a few minutes while dependencies are downloaded. On Mac/Linux the models are downloaded by `setup_models_unix.py`.
    - You can also run `python gui.py` directly if you manage your own environment.
-3. The Fusion2X GUI will launch. All logs are saved in `logs/`.
+4. The Fusion2X GUI will launch. All logs are saved in `logs/`.
 
 ### CLI usage
 
