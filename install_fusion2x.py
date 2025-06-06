@@ -77,8 +77,11 @@ def install_win_runtime():
 
     print("[!] Visual C++ runtime missing. Installing...")
     try:
-        env_setup.install_vc_runtime()
-        print("[+] Visual C++ runtime installed.")
+        success = env_setup.install_vc_runtime()
+        if success:
+            print("[+] Visual C++ runtime installed.")
+        else:
+            print("[-] Failed to verify Visual C++ runtime installation.")
     except Exception as exc:
         print(f"[-] Failed to install Visual C++ runtime: {exc}")
 
