@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import subprocess
+from utils import env_setup
 
 sys.path.insert(
     0,
@@ -28,6 +29,7 @@ from utils.logfile_utils import make_log_filename
 gui_log_path = os.path.join("logs", "gui.log")
 os.makedirs("logs", exist_ok=True)
 logger = get_logger(gui_log_path, module_name="GUI")
+env_setup.ensure_vc_runtime(logger)
 
 
 

@@ -2,6 +2,7 @@ import argparse
 import os
 import sys
 import json
+from utils import env_setup
 from utils.logger import get_logger
 from utils.logfile_utils import make_log_filename
 from utils.json_utils import validate_json_request
@@ -39,6 +40,7 @@ def get_run_log_path():
 # Set up logger ONCE, at module level, for whole script
 log_path = get_run_log_path()
 logger = get_logger(log_path, module_name="Receiver")
+env_setup.ensure_vc_runtime(logger)
 
 
 def parse_cli_args():
