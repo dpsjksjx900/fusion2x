@@ -40,3 +40,4 @@ def test_run_model_command_unknown_issue(monkeypatch):
     with pytest.raises(RuntimeError) as exc:
         process_utils.run_model_command(['fake'], DummyLogger())
     assert 'graphics drivers' in str(exc.value)
+utils/env_setup.py
