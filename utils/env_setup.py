@@ -19,6 +19,17 @@ def vc_runtime_installed():
     return False
 
 
+def vulkan_available():
+    """Return True if Vulkan runtime (GPU drivers) is available."""
+    if platform.system().lower() != "windows":
+        return True
+    try:
+        ctypes.WinDLL("vulkan-1.dll")
+        return True
+    except OSError:
+        return False
+
+
 def install_vc_runtime():
     """Download and silently install the Microsoft Visual C++ runtime."""
     if platform.system().lower() != "windows":
