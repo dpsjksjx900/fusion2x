@@ -37,3 +37,24 @@ def install_vc_runtime():
             os.remove(installer)
 
     return vc_runtime_installed()
+
+
+def ensure_vc_runtime(logger=None):
+    """Ensure the Visual C++ runtime is installed on Windows."""
+    if vc_runtime_installed():
+        return True
+    if logger:
+        logger.info("Visual C++ runtime not detected. Attempting installation...")
+    try:
+        success = install_vc_runtime()
+        if success:
+            if logger:
+                logger.info("Visual C++ runtime installed successfully.")
+            return True
+        if logger:
+            logger.warning("Failed to verify Visual C++ runtime installation.")
+        return False
+    except Exception as exc:
+        if logger:
+            logger.error(f"Failed to install Visual C++ runtime: {exc}")
+        return False
