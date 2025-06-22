@@ -33,6 +33,11 @@ def run_model_command(cmd, logger):
                 "Visual C++ Runtime. Install the Visual C++ Redistributable "
                 "and try again."
             )
+        elif not env_setup.vulkan_available():
+            hint = (
+                "The process crashed (0xC0000005) because Vulkan drivers were "
+                "not detected. Please install or update your graphics drivers."
+            )
         else:
             hint = (
                 "The process crashed (0xC0000005). This often indicates "
