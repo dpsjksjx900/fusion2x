@@ -19,6 +19,17 @@ def vc_runtime_installed():
     return False
 
 
+def vulkan_available():
+    """Return True if Vulkan runtime (GPU drivers) is available."""
+    if platform.system().lower() != "windows":
+        return True
+    try:
+        ctypes.WinDLL("vulkan-1.dll")
+        return True
+    except OSError:
+        return False
+
+
 def install_vc_runtime():
     """Download and silently install the Microsoft Visual C++ runtime."""
     if platform.system().lower() != "windows":
@@ -37,3 +48,24 @@ def install_vc_runtime():
             os.remove(installer)
 
     return vc_runtime_installed()
+
+
+def ensure_vc_runtime(logger=None):
+    """Ensure the Visual C++ runtime is installed on Windows."""
+    if vc_runtime_installed():
+        return True
+    if logger:
+        logger.info("Visual C++ runtime not detected. Attempting installation...")
+    try:
+        success = install_vc_runtime()
+        if success:
+            if logger:
+                logger.info("Visual C++ runtime installed successfully.")
+            return True
+        if logger:
+            logger.warning("Failed to verify Visual C++ runtime installation.")
+        return False
+    except Exception as exc:
+        if logger:
+            logger.error(f"Failed to install Visual C++ runtime: {exc}")
+        return False
